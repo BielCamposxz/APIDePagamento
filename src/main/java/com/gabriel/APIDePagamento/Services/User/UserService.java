@@ -14,12 +14,19 @@ public class UserService implements IUserService{
     private IUserRepositorio userRepositorio;
 
     public UsuarioModel BuscarUserInfo(int id) {
-        return userRepositorio.Retornar(id);
+        List<UsuarioModel> user = userRepositorio.BuscarTodos();
+        return user.stream().filter(x -> x.id == id)
+                .findFirst().orElse(null);
     }
 
     public void Salvar(UsuarioModel usuario) {
-        userRepositorio.Salvar(usuario);
-
+        UsuarioModel usuarioInstacia = new UsuarioModel(
+                usuario.id,
+                usuario.nome,
+                usuario.saldo,
+                usuario.TipoUser
+        );
+        userRepositorio.Salvar(usuarioInstacia);
     }
 
     public List<UsuarioModel> BuscarTodos() {

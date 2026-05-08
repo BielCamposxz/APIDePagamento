@@ -18,18 +18,7 @@ public class UserRepositorio implements IUserRepositorio{
 
     public void Salvar(UsuarioModel usuario)
     {
-        UsuarioModel usuarioInstacia = new UsuarioModel(
-                usuario.id,
-                usuario.nome,
-                usuario.saldo,
-                usuario.TipoUser
-        );
-        user.add(usuarioInstacia);
-    }
-
-    public UsuarioModel Retornar(int id) {
-        return user.stream().filter(x -> x.id == id)
-                .findFirst().orElse(null);
+        user.add(usuario);
     }
 
     public List<UsuarioModel> BuscarTodos() {

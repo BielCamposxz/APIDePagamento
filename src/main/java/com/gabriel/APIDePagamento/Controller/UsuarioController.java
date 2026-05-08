@@ -14,8 +14,8 @@ public class UsuarioController {
     @Autowired
     private UserService service;
 
-    @GetMapping("Usuario/ReturnAll")
-    public List<UsuarioModel> BuscarTodos() {
+    @GetMapping("/{id}/Usuario/ReturnAll")
+    public List<UsuarioModel> BuscarTodos(@PathVariable int id) {
         return  service.BuscarTodos();
     }
 

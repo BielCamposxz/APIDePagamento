@@ -11,7 +11,6 @@ import java.util.List;
 public interface IUserRepositorio {
 
     public void Salvar(UsuarioModel usuario);
-    public UsuarioModel Retornar(int id);
 
     public List<UsuarioModel> BuscarTodos();
 }
