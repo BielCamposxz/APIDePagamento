@@ -13,4 +13,5 @@ public interface IUserRepositorio {
     public void Salvar(UsuarioModel usuario);
 
     public List<UsuarioModel> BuscarTodos();
+    public void FistUser(UsuarioModel usuario);
 }

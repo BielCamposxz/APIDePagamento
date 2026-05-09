@@ -21,6 +21,16 @@ public class UserRepositorio implements IUserRepositorio{
         user.add(usuario);
     }
 
+    public void FistUser(UsuarioModel usuario) {
+        UsuarioModel primeiroUsuario = new UsuarioModel(
+                usuario.id,
+                usuario.nome,
+                usuario.saldo,
+                usuario.TipoUser
+        );
+        user.add(primeiroUsuario);
+    }
+
     public List<UsuarioModel> BuscarTodos() {
         return user;
     }

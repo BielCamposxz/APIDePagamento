@@ -7,7 +7,9 @@ import java.util.List;
 public interface IUserService {
     public UsuarioModel BuscarUserInfo(int id);
 
-    public void Salvar(UsuarioModel usuario);
+    public String Salvar(UsuarioModel usuario, int id);
 
-    public List<UsuarioModel> BuscarTodos();
+    public List<UsuarioModel> BuscarTodos(int id);
+
+    public void CriarPrimeiroUser(UsuarioModel usuario);
 }

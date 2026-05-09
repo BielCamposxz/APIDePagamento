@@ -1,9 +1,11 @@
 package com.gabriel.APIDePagamento.Services.Transacao;
 
+import com.gabriel.APIDePagamento.Enum.TypeUserEnum;
 import com.gabriel.APIDePagamento.Model.TransacaoModel;
 import com.gabriel.APIDePagamento.Model.TransacaoSemTransmiterModel;
 import com.gabriel.APIDePagamento.Model.UsuarioModel;
 import com.gabriel.APIDePagamento.Repositorio.Transacao.ITransacaoRepositorio;
+import com.gabriel.APIDePagamento.Repositorio.User.IUserRepositorio;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,13 @@ import java.util.List;
 @Service
 public class TransacaoService implements ITransacaoService{
     @Autowired
-    public ITransacaoRepositorio repositorio;
+    public ITransacaoRepositorio Transacaorepositorio;
+
+    @Autowired
+    public IUserRepositorio UserRepositorio;
 
     public void Salvar(TransacaoSemTransmiterModel transicao) {
+
         TransacaoModel transacaoInstacia = new TransacaoModel(
                 transicao.id,
                 transicao.userId,
@@ -24,15 +30,48 @@ public class TransacaoService implements ITransacaoService{
                 transicao.valor
         );
 
-        repositorio.Salvar(transacaoInstacia);
+        Transacaorepositorio.Salvar(transacaoInstacia);
     }
 
-    public List<TransacaoModel> RetornarAllTrasition() {
-        return repositorio.BuscarTodos();
+    public String FazerPagamento(TransacaoSemTransmiterModel transicao, int id){
+        UsuarioModel usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.userId).findFirst().orElse(null);
+
+        if(usuarioTrasnfer.id != id) {
+            return "Voce pode fazer transacoes apenas da sua conta logada";
+        }
+        if(usuarioTrasnfer.TipoUser == TypeUserEnum.Logista) {
+            return "Logistas nao podem fazer transacaoes";
+        }
+        if(usuarioTrasnfer.saldo < transicao.valor) {
+            return "Saldo insuficiente";
+        }
+
+
+        UsuarioModel usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.idUserRecived).findFirst().orElse(null);
+        if(usuarioResived.TipoUser == TypeUserEnum.Bancario) {
+            return "Bancarios nao pode receber transacoes";
+        }
+
+        usuarioResived.setSaldo(usuarioResived.saldo + transicao.valor);
+        usuarioTrasnfer.setSaldo(usuarioTrasnfer.saldo - transicao.valor);
+        Salvar(transicao);
+        return "pagamento feito";
+
+    }
+
+    public List<TransacaoModel> RetornarAllTrasition(int id)
+    {
+        UsuarioModel usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
+
+        if(usuarioTrasnfer.TipoUser != TypeUserEnum.Bancario) {
+            return null;
+        }
+
+        return Transacaorepositorio.BuscarTodos();
     }
 
     public List<TransacaoModel> RetornarTransitionUser(int id) {
-        List<TransacaoModel> transacao = repositorio.BuscarTodos();
+        List<TransacaoModel> transacao = Transacaorepositorio.BuscarTodos();
         return transacao.stream().filter(x -> x.userId == id).toList();
     }
 

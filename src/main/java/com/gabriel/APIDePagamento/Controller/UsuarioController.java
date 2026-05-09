@@ -8,26 +8,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/{id}")
 public class UsuarioController {
 
     @Autowired
     private UserService service;
 
-    @GetMapping("/{id}/Usuario/ReturnAll")
+    // apenas bancarios pode usar
+    @GetMapping("/Usuario/ReturnAll")
     public List<UsuarioModel> BuscarTodos(@PathVariable int id) {
-        return  service.BuscarTodos();
+        return service.BuscarTodos(id);
     }
 
-    @GetMapping("/{id}/Usuario/Informacoes")
+    @GetMapping("/Usuario/Informacoes")
     public UsuarioModel MostrarUsuario(@PathVariable int id) {
         return service.BuscarUserInfo(id);
     }
 
+    // apenas bancarios podem fazer isso
     @PostMapping("/Usuario/Salvar")
-    public String Salvar(@RequestBody UsuarioModel usuario) {
-        service.Salvar(usuario);
+    public String Salvar(@RequestBody UsuarioModel usuario, @PathVariable int id) {
+        service.Salvar(usuario, id);
         return "Usuario salvo com sucesso";
+    }
+
+    @PostMapping("/PrimeiroUser")
+    public void Primeiro(@RequestBody UsuarioModel usuario) {
+        service.CriarPrimeiroUser(usuario);
     }
 
 }

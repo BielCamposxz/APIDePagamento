@@ -9,27 +9,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/{id}")
 public class TransacaoController {
     @Autowired
     public ITransacaoService service;
 
-    @GetMapping("/{id}/trasitions/ReturnAllByUser")
+    @GetMapping("/trasitions/ReturnAllByUser")
     public List<TransacaoModel> returnByUser(@PathVariable int id) {
         return service.RetornarTransitionUser(id);
     }
 
-    @PostMapping("/transition/Buy")
-    public String Pagar(@RequestBody TransacaoSemTransmiterModel Transicao) {
-        service.Salvar(Transicao);
-        return "Pagamento feito";
+    @PutMapping("/transition/Pay")
+    public String Pagar(@RequestBody TransacaoSemTransmiterModel Transicao, @PathVariable int id) {
+        return service.FazerPagamento(Transicao, id);
     }
 
-    @GetMapping("/{id}/transition/returnAll")
+    // apenas bancarios pode usar
+    @GetMapping("/transition/returnAll")
     public List<TransacaoModel> retornarTodas(@PathVariable int id){
-       return service.RetornarAllTrasition();
+       List<TransacaoModel> transicoes =  service.RetornarAllTrasition(id);
+       return transicoes;
     }
 
 }
