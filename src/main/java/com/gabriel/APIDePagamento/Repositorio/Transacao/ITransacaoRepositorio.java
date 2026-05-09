@@ -1,6 +1,7 @@
 package com.gabriel.APIDePagamento.Repositorio.Transacao;
 
 import com.gabriel.APIDePagamento.Model.TransacaoModel;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

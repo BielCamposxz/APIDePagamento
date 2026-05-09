@@ -1,7 +1,13 @@
 package com.gabriel.APIDePagamento.Model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Notification {
+@Setter
+@Getter
+@AllArgsConstructor
+public class NotificationModel {
     public int id;
     public int valor;
     public int idUserRecived;

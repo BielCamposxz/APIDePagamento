@@ -4,6 +4,7 @@ import com.gabriel.APIDePagamento.Model.UsuarioModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;

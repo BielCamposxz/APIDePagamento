@@ -1,6 +1,8 @@
 package com.gabriel.APIDePagamento.Services.User;
 
 import com.gabriel.APIDePagamento.Model.UsuarioModel;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

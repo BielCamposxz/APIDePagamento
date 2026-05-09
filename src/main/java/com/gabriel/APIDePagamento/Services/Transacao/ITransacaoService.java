@@ -3,6 +3,8 @@ package com.gabriel.APIDePagamento.Services.Transacao;
 import com.gabriel.APIDePagamento.Model.TransacaoModel;
 import com.gabriel.APIDePagamento.Model.TransacaoSemTransmiterModel;
 import com.gabriel.APIDePagamento.Model.UsuarioModel;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
