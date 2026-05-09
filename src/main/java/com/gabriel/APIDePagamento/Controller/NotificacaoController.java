@@ -27,4 +27,11 @@ public class NotificacaoController {
     public List<NotificationModel> BuscarPorId(@PathVariable int id) {
         return notificacaoService.BuscarPorId(id);
     }
+
+    @GetMapping("/ReturnAll")
+    public List<NotificationModel> ReturnAll(@PathVariable int id) {
+        return notificacaoService.RetornarAll(id);
+    }
+
+
 }

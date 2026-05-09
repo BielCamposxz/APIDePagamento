@@ -13,9 +13,9 @@ import java.util.List;
 public class NotificacaoRepositorio implements INotificacaoRepositorio{
     List<NotificationModel> noticacoesResived = new LinkedList<>();
     List<NotificationModel> noticacoesTransmited = new LinkedList<>();
+    List<NotificationModel> AllNotification = new LinkedList<>();
 
     public void Salvar(NotificationModel notificacaoResived, NotificationModel notificacaoTransmited){
-
         noticacoesResived.add(notificacaoResived);
         noticacoesTransmited.add(notificacaoTransmited);
     }
@@ -25,6 +25,12 @@ public class NotificacaoRepositorio implements INotificacaoRepositorio{
     }
     public List<NotificationModel> BuscarTransmited() {
         return noticacoesTransmited;
+    }
+
+    public List<NotificationModel> BuscarTodas() {
+        AllNotification.addAll(noticacoesResived);
+        AllNotification.addAll(noticacoesTransmited);
+        return AllNotification;
     }
 
 }

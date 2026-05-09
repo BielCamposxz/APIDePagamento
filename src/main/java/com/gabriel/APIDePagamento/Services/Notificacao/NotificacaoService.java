@@ -1,5 +1,6 @@
 package com.gabriel.APIDePagamento.Services.Notificacao;
 
+import com.gabriel.APIDePagamento.Enum.TypeUserEnum;
 import com.gabriel.APIDePagamento.Model.NotificationModel;
 import com.gabriel.APIDePagamento.Model.TransacaoModel;
 import com.gabriel.APIDePagamento.Model.UsuarioModel;
@@ -24,8 +25,7 @@ public class NotificacaoService implements INotificacaoService {
     @Autowired
     public IUserRepositorio UsuarioRepositorio;
 
-    // fazer os metodos de retorna todas as notificacoes (para bancarios)
-    // pegar emprestimo com o banco
+
     public void CriarNotificacao() {
        int ultimaNotificacaoId = UltimaNotificacao();
 
@@ -62,6 +62,15 @@ public class NotificacaoService implements INotificacaoService {
     public int UltimaNotificacao() {
         List<NotificationModel> Notificacoes = NotificaoRepositorio.BuscarTransmited();
         return Notificacoes.isEmpty() ? 1 : Notificacoes.getFirst().id + 1;
+    }
+
+    public List<NotificationModel> RetornarAll(int id) {
+        UsuarioModel usuario = UsuarioRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
+        if(usuario.TipoUser != TypeUserEnum.Bancario) {
+            return null;
+        }
+
+        return NotificaoRepositorio.BuscarTodas();
     }
 
     public List<NotificationModel> BuscarPorId(int id) {

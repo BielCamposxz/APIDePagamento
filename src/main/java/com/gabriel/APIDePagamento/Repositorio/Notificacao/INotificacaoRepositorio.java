@@ -8,4 +8,5 @@ public interface INotificacaoRepositorio {
     public void Salvar(NotificationModel notificacaoResived, NotificationModel notificacaoTransmited);
     public List<NotificationModel> BuscarResived();
     public List<NotificationModel> BuscarTransmited();
+    public List<NotificationModel> BuscarTodas();
 }
