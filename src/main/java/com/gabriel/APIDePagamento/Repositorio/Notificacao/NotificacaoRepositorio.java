@@ -11,22 +11,20 @@ import java.util.List;
 
 @Repository
 public class NotificacaoRepositorio implements INotificacaoRepositorio{
-    List<NotificationModel> noticacoes = new LinkedList<>();
+    List<NotificationModel> noticacoesResived = new LinkedList<>();
+    List<NotificationModel> noticacoesTransmited = new LinkedList<>();
 
-    public void Salvar(NotificationModel notificacao){
-        NotificationModel notificacaoInstacia = new NotificationModel(
-                notificacao.id,
-                notificacao.valor,
-                notificacao.idUserRecived,
-                notificacao.IdUserTransmiter,
-                notificacao.texto
-        );
+    public void Salvar(NotificationModel notificacaoResived, NotificationModel notificacaoTransmited){
 
-        noticacoes.add(notificacaoInstacia);
+        noticacoesResived.add(notificacaoResived);
+        noticacoesTransmited.add(notificacaoTransmited);
     }
 
-    public List<NotificationModel> BuscarTodas() {
-        return noticacoes;
+    public List<NotificationModel> BuscarResived() {
+        return noticacoesResived;
+    }
+    public List<NotificationModel> BuscarTransmited() {
+        return noticacoesTransmited;
     }
 
 }

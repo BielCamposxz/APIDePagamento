@@ -2,11 +2,9 @@ package com.gabriel.APIDePagamento.Services.Transacao;
 
 import com.gabriel.APIDePagamento.Enum.TypeUserEnum;
 import com.gabriel.APIDePagamento.Model.*;
-import com.gabriel.APIDePagamento.Repositorio.Notificacao.INotificacaoRepositorio;
 import com.gabriel.APIDePagamento.Repositorio.Transacao.ITransacaoRepositorio;
 import com.gabriel.APIDePagamento.Repositorio.User.IUserRepositorio;
-import com.gabriel.APIDePagamento.Services.INotificacaoService;
-import org.jspecify.annotations.NonNull;
+import com.gabriel.APIDePagamento.Services.Notificacao.INotificacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +57,7 @@ public class TransacaoService implements ITransacaoService{
         usuarioResived.setSaldo(usuarioResived.saldo + transicao.valor);
         usuarioTrasnfer.setSaldo(usuarioTrasnfer.saldo - transicao.valor);
         Salvar(transicao);
-        NotificacaoService.CriarNotificacao(id);
+        NotificacaoService.CriarNotificacao();
         return "pagamento feito";
 
     }
