@@ -1,29 +1,29 @@
-package com.gabriel.APIDePagamento.Services.Transacao;
+package com.gabriel.APIDePagamento.service.transaction;
 
-import com.gabriel.APIDePagamento.Enum.TypeUserEnum;
-import com.gabriel.APIDePagamento.Model.*;
-import com.gabriel.APIDePagamento.Repositorio.Transacao.ITransacaoRepositorio;
-import com.gabriel.APIDePagamento.Repositorio.User.IUserRepositorio;
-import com.gabriel.APIDePagamento.Services.Notificacao.INotificacaoService;
+import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
+import com.gabriel.APIDePagamento.entity.*;
+import com.gabriel.APIDePagamento.repository.transaction.ITransactionRepository;
+import com.gabriel.APIDePagamento.repository.user.IUserRepository;
+import com.gabriel.APIDePagamento.service.notification.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TransacaoService implements ITransacaoService{
+public class TransactionService implements ITransactionService {
     @Autowired
-    public ITransacaoRepositorio Transacaorepositorio;
+    public ITransactionRepository Transacaorepositorio;
 
     @Autowired
-    public IUserRepositorio UserRepositorio;
+    public IUserRepository UserRepositorio;
 
     @Autowired
-    public INotificacaoService NotificacaoService;
+    public INotificationService NotificacaoService;
 
     public void Salvar(TransacaoSemTransmiterModel transicao) {
 
-        TransacaoModel transacaoInstacia = new TransacaoModel(
+        TransactionEntity transacaoInstacia = new TransactionEntity(
                 transicao.id,
                 transicao.userId,
                 transicao.idUserRecived,
@@ -36,7 +36,7 @@ public class TransacaoService implements ITransacaoService{
 
     public String FazerPagamento(TransacaoSemTransmiterModel transicao, int id){
 
-        UsuarioModel usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.userId).findFirst().orElse(null);
+        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.userId).findFirst().orElse(null);
 
         if(usuarioTrasnfer.id != id) {
             return "Voce pode fazer transacoes apenas da sua conta logada";
@@ -49,7 +49,7 @@ public class TransacaoService implements ITransacaoService{
         }
 
 
-        UsuarioModel usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.idUserRecived).findFirst().orElse(null);
+        UserEntity usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.idUserRecived).findFirst().orElse(null);
         if(usuarioResived.TipoUser == TypeUserEnum.Bancario) {
             return "Bancarios nao pode receber transacoes";
         }
@@ -62,9 +62,9 @@ public class TransacaoService implements ITransacaoService{
 
     }
 
-    public List<TransacaoModel> RetornarAllTrasition(int id)
+    public List<TransactionEntity> RetornarAllTrasition(int id)
     {
-        UsuarioModel usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
+        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
 
         if(usuarioTrasnfer.TipoUser != TypeUserEnum.Bancario) {
             return null;
@@ -73,8 +73,8 @@ public class TransacaoService implements ITransacaoService{
         return Transacaorepositorio.BuscarTodos();
     }
 
-    public List<TransacaoModel> RetornarTransitionUser(int id) {
-        List<TransacaoModel> transacao = Transacaorepositorio.BuscarTodos();
+    public List<TransactionEntity> RetornarTransitionUser(int id) {
+        List<TransactionEntity> transacao = Transacaorepositorio.BuscarTodos();
         return transacao.stream().filter(x -> x.userId == id).toList();
     }
 

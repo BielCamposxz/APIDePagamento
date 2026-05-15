@@ -1,6 +1,6 @@
-package com.gabriel.APIDePagamento.Model;
+package com.gabriel.APIDePagamento.entity;
 
-import com.gabriel.APIDePagamento.Enum.TypeUserEnum;
+import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UsuarioModel {
+public class UserEntity {
     public int id;
     public String nome;
     public int saldo;

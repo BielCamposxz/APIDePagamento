@@ -1,6 +1,6 @@
-package com.gabriel.APIDePagamento.Repositorio.User;
+package com.gabriel.APIDePagamento.repository.user;
 
-import com.gabriel.APIDePagamento.Model.UsuarioModel;
+import com.gabriel.APIDePagamento.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +13,16 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @Repository
-public class UserRepositorio implements IUserRepositorio{
-    List<UsuarioModel> user = new LinkedList<>();
+public class UserRepository implements IUserRepository {
+    List<UserEntity> user = new LinkedList<>();
 
-    public void Salvar(UsuarioModel usuario)
+    public void Salvar(UserEntity usuario)
     {
         user.add(usuario);
     }
 
-    public void FistUser(UsuarioModel usuario) {
-        UsuarioModel primeiroUsuario = new UsuarioModel(
+    public void FistUser(UserEntity usuario) {
+        UserEntity primeiroUsuario = new UserEntity(
                 usuario.id,
                 usuario.nome,
                 usuario.saldo,
@@ -31,7 +31,7 @@ public class UserRepositorio implements IUserRepositorio{
         user.add(primeiroUsuario);
     }
 
-    public List<UsuarioModel> BuscarTodos() {
+    public List<UserEntity> BuscarTodos() {
         return user;
     }
 }

@@ -1,4 +1,4 @@
-package com.gabriel.APIDePagamento.Model;
+package com.gabriel.APIDePagamento.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

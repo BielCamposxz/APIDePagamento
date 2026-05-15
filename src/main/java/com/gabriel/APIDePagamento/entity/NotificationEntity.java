@@ -1,16 +1,16 @@
-package com.gabriel.APIDePagamento.Model;
+package com.gabriel.APIDePagamento.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
-public class TransacaoModel {
+public class NotificationEntity {
     public int id;
-    public int userId;
+    public int valor;
     public int idUserRecived;
     public int IdUserTransmiter;
-    public int valor;
+    public String texto;
 }
