@@ -64,7 +64,7 @@ public class NotificationService implements INotificationService {
         return Notificacoes.isEmpty() ? 1 : Notificacoes.getFirst().id + 1;
     }
 
-    public List<NotificationEntity> RetornarAll(int id) {
+    public List<NotificationEntity> getAll(int id) {
         UserEntity usuario = UsuarioRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
         if(usuario.TipoUser != TypeUserEnum.Bancario) {
             return null;
@@ -73,7 +73,7 @@ public class NotificationService implements INotificationService {
         return NotificaoRepositorio.BuscarTodas();
     }
 
-    public List<NotificationEntity> BuscarPorId(int id) {
+    public List<NotificationEntity> getByUserId(int id) {
         List<NotificationEntity> transtion = NotificaoRepositorio.BuscarTransmited().stream().filter(x -> x.IdUserTransmiter == id).toList();
         List<NotificationEntity> resived = NotificaoRepositorio.BuscarResived().stream().filter(x -> x.idUserRecived == id).toList();
         List<NotificationEntity> Notification = new LinkedList<>();

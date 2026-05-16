@@ -1,7 +1,6 @@
 package com.gabriel.APIDePagamento.controller;
 
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
-import com.gabriel.APIDePagamento.entity.TransacaoSemTransmiterModel;
 import com.gabriel.APIDePagamento.service.transaction.ITransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,26 +8,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{id}")
+@RequestMapping("/transaction")
 public class TransactionController {
-    @Autowired
-    public ITransactionService service;
 
-    @GetMapping("/trasitions/ReturnAllByUser")
-    public List<TransactionEntity> returnByUser(@PathVariable int id) {
-        return service.RetornarTransitionUser(id);
+    private final ITransactionService transactionService;
+
+    public TransactionController(ITransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
-    @PutMapping("/transition/Pay")
-    public String Pagar(@RequestBody TransacaoSemTransmiterModel Transicao, @PathVariable int id) {
-        return service.FazerPagamento(Transicao, id);
+    @GetMapping("/user/{id}/history")
+    public List<TransactionEntity> getTransactionHistoryByUserId(@PathVariable int id) {
+        return this.transactionService.getByUserId(id);
     }
 
-    // apenas bancarios pode usar
-    @GetMapping("/transition/returnAll")
-    public List<TransactionEntity> retornarTodas(@PathVariable int id){
-       List<TransactionEntity> transicoes =  service.RetornarAllTrasition(id);
-       return transicoes;
+    @PostMapping("/user/{id}/payment")
+    public String payment(@RequestBody TransactionEntity transaction, @PathVariable int id) {
+        return this.transactionService.makePayment(transaction, id);
+    }
+
+    @GetMapping("/user/{id}/history/all")
+    public List<TransactionEntity> getAllTransactionHistoryByUserId(@PathVariable int id){
+        return this.transactionService.getAll(id);
     }
 
 }

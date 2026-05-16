@@ -21,20 +21,17 @@ public class TransactionService implements ITransactionService {
     @Autowired
     public INotificationService NotificacaoService;
 
-    public void Salvar(TransacaoSemTransmiterModel transicao) {
-
-        TransactionEntity transacaoInstacia = new TransactionEntity(
+    public void Salvar(TransactionEntity transicao) {
+        Transacaorepositorio.Salvar(new TransactionEntity(
                 transicao.id,
                 transicao.userId,
                 transicao.idUserRecived,
                 transicao.userId,
                 transicao.valor
-        );
-
-        Transacaorepositorio.Salvar(transacaoInstacia);
+        ));
     }
 
-    public String FazerPagamento(TransacaoSemTransmiterModel transicao, int id){
+    public String makePayment(TransactionEntity transicao, int id){
 
         UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.userId).findFirst().orElse(null);
 
@@ -62,7 +59,7 @@ public class TransactionService implements ITransactionService {
 
     }
 
-    public List<TransactionEntity> RetornarAllTrasition(int id)
+    public List<TransactionEntity> getAll(int id)
     {
         UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
 
@@ -73,7 +70,7 @@ public class TransactionService implements ITransactionService {
         return Transacaorepositorio.BuscarTodos();
     }
 
-    public List<TransactionEntity> RetornarTransitionUser(int id) {
+    public List<TransactionEntity> getByUserId(int id) {
         List<TransactionEntity> transacao = Transacaorepositorio.BuscarTodos();
         return transacao.stream().filter(x -> x.userId == id).toList();
     }

@@ -18,11 +18,11 @@ public class UserService implements IUserService{
         return userRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
     }
 
-    public UserEntity BuscarUserInfo(int id) {
+    public UserEntity getUser(int id) {
         return BuscarUser(id);
     }
 
-    public String Salvar(UserEntity usuario, int id) {
+    public String saveUser(UserEntity usuario, int id) {
         UserEntity usuarioRetornado = BuscarUser(id);
 
         if(usuarioRetornado.TipoUser != TypeUserEnum.Bancario) {
@@ -39,7 +39,7 @@ public class UserService implements IUserService{
         return "Usuario criado com sucesso";
     }
 
-    public List<UserEntity> BuscarTodos(int id) {
+    public List<UserEntity> getAllUsers(int id) {
         UserEntity usuario = BuscarUser(id);
 
         if(usuario.TipoUser != TypeUserEnum.Bancario) {

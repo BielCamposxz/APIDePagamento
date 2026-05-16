@@ -1,7 +1,6 @@
 package com.gabriel.APIDePagamento.controller;
 
 import com.gabriel.APIDePagamento.entity.NotificationEntity;
-import com.gabriel.APIDePagamento.repository.notification.INotificationRepository;
 import com.gabriel.APIDePagamento.service.notification.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,23 +11,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{id}/Notificacoes")
+@RequestMapping("/notification")
 public class NotificationController {
 
-    @Autowired
-    public INotificationRepository notificoesRepositorio;
+    private final INotificationService notificationService;
 
-    @Autowired
-    public INotificationService notificacaoService;
-
-    @GetMapping("/ReturnByUser")
-    public List<NotificationEntity> BuscarPorId(@PathVariable int id) {
-        return notificacaoService.BuscarPorId(id);
+    public NotificationController(INotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 
-    @GetMapping("/ReturnAll")
-    public List<NotificationEntity> ReturnAll(@PathVariable int id) {
-        return notificacaoService.RetornarAll(id);
+    @GetMapping("/user/{id}")
+    public List<NotificationEntity> getNotificationsByUserId(@PathVariable int id) {
+        return this.notificationService.getByUserId(id);
+    }
+
+    @GetMapping("/user/{id}/all")
+    public List<NotificationEntity> getAllNotifications(@PathVariable int id) {
+        return this.notificationService.getAll(id);
     }
 
 

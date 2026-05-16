@@ -2,39 +2,39 @@ package com.gabriel.APIDePagamento.controller;
 
 import com.gabriel.APIDePagamento.entity.UserEntity;
 import com.gabriel.APIDePagamento.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/{id}")
+@RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService service;
+    private final UserService userService;
 
-    // apenas bancarios pode usar
-    @GetMapping("/Usuario/ReturnAll")
-    public List<UserEntity> BuscarTodos(@PathVariable int id) {
-        return service.BuscarTodos(id);
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/Usuario/Informacoes")
-    public UserEntity MostrarUsuario(@PathVariable int id) {
-        return service.BuscarUserInfo(id);
+    @GetMapping("/{id}/all")
+    public List<UserEntity> getAllUsers(@PathVariable int id) {
+        return this.userService.getAllUsers(id);
     }
 
-    // apenas bancarios podem fazer isso
-    @PostMapping("/Usuario/Salvar")
-    public String Salvar(@RequestBody UserEntity usuario, @PathVariable int id) {
-        service.Salvar(usuario, id);
-        return "Usuario salvo com sucesso";
+    @GetMapping("/{id}")
+    public UserEntity getUserById(@PathVariable int id) {
+        return this.userService.getUser(id);
     }
 
-    @PostMapping("/PrimeiroUser")
+    @PostMapping("/{id}")
+    public String saveNewUser(@RequestBody UserEntity user, @PathVariable int id) {
+        return this.userService.saveUser(user, id);
+    }
+
+    // tem que sumir
+    @PostMapping("/CreatefistUser")
     public void Primeiro(@RequestBody UserEntity usuario) {
-        service.CriarPrimeiroUser(usuario);
+        this.userService.CriarPrimeiroUser(usuario);
     }
 
 }

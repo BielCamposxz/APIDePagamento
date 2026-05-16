@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface INotificationService {
     public void CriarNotificacao();
-    public List<NotificationEntity> BuscarPorId(int id);
+    public List<NotificationEntity> getByUserId(int id);
     public int UltimaNotificacao();
-    public List<NotificationEntity> RetornarAll(int id);
+    public List<NotificationEntity> getAll(int id);
 }
