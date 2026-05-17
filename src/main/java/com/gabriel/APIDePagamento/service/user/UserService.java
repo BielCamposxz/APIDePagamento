@@ -15,7 +15,7 @@ public class UserService implements IUserService{
     private IUserRepository userRepositorio;
 
     public UserEntity BuscarUser(int id) {
-        return userRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
+        return userRepositorio.BuscarTodos().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
     }
 
     public UserEntity getUser(int id) {
@@ -25,15 +25,15 @@ public class UserService implements IUserService{
     public String saveUser(UserEntity usuario, int id) {
         UserEntity usuarioRetornado = BuscarUser(id);
 
-        if(usuarioRetornado.TipoUser != TypeUserEnum.Bancario) {
+        if(usuarioRetornado.getTypeUser() != TypeUserEnum.Bancario) {
             return "Apenas bancarios pode fazer criar usuarios";
         }
 
         UserEntity usuarioInstacia = new UserEntity(
-                usuario.id,
-                usuario.nome,
-                usuario.saldo,
-                usuario.TipoUser
+                usuario.getId(),
+                usuario.getName(),
+                usuario.getUserBalance(),
+                usuario.getTypeUser()
         );
         userRepositorio.Salvar(usuarioInstacia);
         return "Usuario criado com sucesso";
@@ -42,7 +42,7 @@ public class UserService implements IUserService{
     public List<UserEntity> getAllUsers(int id) {
         UserEntity usuario = BuscarUser(id);
 
-        if(usuario.TipoUser != TypeUserEnum.Bancario) {
+        if(usuario.getTypeUser() != TypeUserEnum.Bancario) {
             return null;
         }
 

@@ -1,5 +1,6 @@
 package com.gabriel.APIDePagamento.service.notification;
 
+import com.gabriel.APIDePagamento.objectvalue.NotificationTypeEnum;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.NotificationEntity;
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
@@ -16,69 +17,38 @@ import java.util.List;
 @Service
 public class NotificationService implements INotificationService {
 
-    @Autowired
-    public ITransactionRepository TransacaoRepositorio;
+    private final ITransactionRepository transactionRepository;
+    private final INotificationRepository notificationRepository;
+    private final IUserRepository userRepository;
 
-    @Autowired
-    public INotificationRepository NotificaoRepositorio;
+    public NotificationService(ITransactionRepository transactionRepository, INotificationRepository notificationRepository, IUserRepository userRepository) {
+        this.transactionRepository = transactionRepository;
+        this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Autowired
-    public IUserRepository UsuarioRepositorio;
 
+    public void createNotification() {
+        TransactionEntity getLastTransaction = this.transactionRepository.getAllTransaction().getLast();
 
-    public void CriarNotificacao() {
-       int ultimaNotificacaoId = UltimaNotificacao();
+        UserEntity receiverUser = this.userRepository.getUserById(getLastTransaction.getReceiverUserId());
+        UserEntity senderUser = this.userRepository.getUserById(getLastTransaction.getSenderUserId());
 
-        TransactionEntity LastTrasacao = TransacaoRepositorio.BuscarTodos().getLast();
-        List<UserEntity> Users = UsuarioRepositorio.BuscarTodos();
-        UserEntity usuarioRecived = Users.stream().filter(x -> x.id == LastTrasacao.idUserRecived).findFirst().orElse(null);
-        UserEntity Transmiterusuario = Users.stream().filter(x -> x.id == LastTrasacao.IdUserTransmiter).findFirst().orElse(null);
-
-        String TextResived = "Voce Recebeu " + LastTrasacao.valor + " de " + Transmiterusuario.nome;
-        String TextTransmiter = "Voce Fez uma transicao de " + LastTrasacao.valor + " para " + usuarioRecived.nome;
-
-        NotificationEntity notificationResived = new NotificationEntity(
-                ultimaNotificacaoId,
-                LastTrasacao.valor,
-                LastTrasacao.idUserRecived,
-                LastTrasacao.IdUserTransmiter,
-                TextResived
-
-        );
-        NotificationEntity NotificationTransmiter = new NotificationEntity(
-                ultimaNotificacaoId,
-                LastTrasacao.valor,
-                LastTrasacao.idUserRecived,
-                LastTrasacao.IdUserTransmiter,
-                TextTransmiter
-
+        this.notificationRepository.saveNewNotification(
+                NotificationEntity.createNewReceiverNotification(getLastTransaction, receiverUser.getName()),
+                NotificationEntity.createNewSenderNotification(getLastTransaction, senderUser.getName())
         );
 
-
-        NotificaoRepositorio.Salvar(notificationResived, NotificationTransmiter);
-
     }
 
-    public int UltimaNotificacao() {
-        List<NotificationEntity> Notificacoes = NotificaoRepositorio.BuscarTransmited();
-        return Notificacoes.isEmpty() ? 1 : Notificacoes.getFirst().id + 1;
+    public List<NotificationEntity> getAllNotification(int id) {
+        UserEntity user = this.userRepository.getUserById(id);
+        if(user.getTypeUser() != TypeUserEnum.Bancario) return null;
+
+        return this.notificationRepository.getAllNotification();
     }
 
-    public List<NotificationEntity> getAll(int id) {
-        UserEntity usuario = UsuarioRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
-        if(usuario.TipoUser != TypeUserEnum.Bancario) {
-            return null;
-        }
-
-        return NotificaoRepositorio.BuscarTodas();
-    }
-
-    public List<NotificationEntity> getByUserId(int id) {
-        List<NotificationEntity> transtion = NotificaoRepositorio.BuscarTransmited().stream().filter(x -> x.IdUserTransmiter == id).toList();
-        List<NotificationEntity> resived = NotificaoRepositorio.BuscarResived().stream().filter(x -> x.idUserRecived == id).toList();
-        List<NotificationEntity> Notification = new LinkedList<>();
-        Notification.addAll(transtion);
-        Notification.addAll(resived);
-        return Notification;
+    public List<NotificationEntity> getNotificationByUserId(int id) {
+        return this.notificationRepository.getAllNotification().stream().filter(x -> x.getSenderUserId() == id || x.getReceiverUserId() == id).toList();
     }
 }

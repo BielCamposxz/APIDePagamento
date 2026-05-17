@@ -8,9 +8,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TransactionEntity {
-    public int id;
-    public int userId;
-    public int idUserRecived;
-    public int IdUserTransmiter;
-    public int valor;
+    private int id;
+    private int receiverUserId;
+    private int senderUserId;
+    private int transitionValue;
 }

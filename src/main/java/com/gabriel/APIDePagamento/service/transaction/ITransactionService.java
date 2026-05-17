@@ -1,7 +1,6 @@
 package com.gabriel.APIDePagamento.service.transaction;
 
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
-import com.gabriel.APIDePagamento.entity.TransacaoSemTransmiterModel;
 
 import java.util.List;
 

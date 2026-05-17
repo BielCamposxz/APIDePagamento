@@ -14,20 +14,17 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    private final INotificationService notificationService;
-
-    public NotificationController(INotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
+    @Autowired
+    private INotificationService notificationService;
 
     @GetMapping("/user/{id}")
     public List<NotificationEntity> getNotificationsByUserId(@PathVariable int id) {
-        return this.notificationService.getByUserId(id);
+        return this.notificationService.getNotificationByUserId(id);
     }
 
     @GetMapping("/user/{id}/all")
     public List<NotificationEntity> getAllNotifications(@PathVariable int id) {
-        return this.notificationService.getAll(id);
+        return this.notificationService.getAllNotification(id);
     }
 
 

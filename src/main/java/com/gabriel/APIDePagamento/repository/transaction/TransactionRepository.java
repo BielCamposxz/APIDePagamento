@@ -14,7 +14,7 @@ public class TransactionRepository implements ITransactionRepository {
         transoes.add(transacao);
     }
 
-    public List<TransactionEntity> BuscarTodos() {
+    public List<TransactionEntity> getAllTransaction() {
         return transoes;
     }
 

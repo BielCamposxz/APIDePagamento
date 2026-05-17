@@ -10,4 +10,5 @@ public interface IUserRepository {
 
     public List<UserEntity> BuscarTodos();
     public void FistUser(UserEntity usuario);
+    public UserEntity getUserById(int id);
 }

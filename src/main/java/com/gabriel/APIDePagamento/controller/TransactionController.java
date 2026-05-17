@@ -2,7 +2,6 @@ package com.gabriel.APIDePagamento.controller;
 
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
 import com.gabriel.APIDePagamento.service.transaction.ITransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class TransactionController {
     }
 
     @GetMapping("/user/{id}/history/all")
-    public List<TransactionEntity> getAllTransactionHistoryByUserId(@PathVariable int id){
+    public List<TransactionEntity> getAllTransactionHistory(@PathVariable int id){
         return this.transactionService.getAll(id);
     }
 

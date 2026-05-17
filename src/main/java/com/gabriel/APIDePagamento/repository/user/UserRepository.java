@@ -14,24 +14,27 @@ import java.util.List;
 @AllArgsConstructor
 @Repository
 public class UserRepository implements IUserRepository {
-    List<UserEntity> user = new LinkedList<>();
+    List<UserEntity> users = new LinkedList<>();
 
     public void Salvar(UserEntity usuario)
     {
-        user.add(usuario);
+        users.add(usuario);
     }
 
     public void FistUser(UserEntity usuario) {
-        UserEntity primeiroUsuario = new UserEntity(
-                usuario.id,
-                usuario.nome,
-                usuario.saldo,
-                usuario.TipoUser
+        users.add(new UserEntity(
+                usuario.getId(),
+                usuario.getName(),
+                usuario.getUserBalance(),
+                usuario.getTypeUser()
         );
-        user.add(primeiroUsuario);
     }
 
     public List<UserEntity> BuscarTodos() {
-        return user;
+        return users;
+    }
+
+    public UserEntity getUserById(int id) {
+        return this.users.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
     }
 }

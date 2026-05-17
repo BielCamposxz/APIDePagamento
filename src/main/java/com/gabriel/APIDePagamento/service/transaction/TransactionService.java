@@ -23,47 +23,46 @@ public class TransactionService implements ITransactionService {
 
     public void Salvar(TransactionEntity transicao) {
         Transacaorepositorio.Salvar(new TransactionEntity(
-                transicao.id,
-                transicao.userId,
-                transicao.idUserRecived,
-                transicao.userId,
-                transicao.valor
+                transicao.getId(),
+                transicao.getSenderUserId(),
+                transicao.getReceiverUserId(),
+                transicao.getTransitionValue()
         ));
     }
 
     public String makePayment(TransactionEntity transicao, int id){
 
-        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.userId).findFirst().orElse(null);
+        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == transicao.getId()).findFirst().orElse(null);
 
-        if(usuarioTrasnfer.id != id) {
+        if(usuarioTrasnfer.getId() != id) {
             return "Voce pode fazer transacoes apenas da sua conta logada";
         }
-        if(usuarioTrasnfer.TipoUser == TypeUserEnum.Logista) {
+        if(usuarioTrasnfer.getTypeUser() == TypeUserEnum.Logista) {
             return "Logistas nao podem fazer transacaoes";
         }
-        if(usuarioTrasnfer.saldo < transicao.valor) {
+        if(usuarioTrasnfer.getUserBalance() < transicao.getTransitionValue()) {
             return "Saldo insuficiente";
         }
 
 
-        UserEntity usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == transicao.idUserRecived).findFirst().orElse(null);
-        if(usuarioResived.TipoUser == TypeUserEnum.Bancario) {
+        UserEntity usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == transicao.getReceiverUserId()).findFirst().orElse(null);
+        if(usuarioResived.getTypeUser() == TypeUserEnum.Bancario) {
             return "Bancarios nao pode receber transacoes";
         }
 
-        usuarioResived.setSaldo(usuarioResived.saldo + transicao.valor);
-        usuarioTrasnfer.setSaldo(usuarioTrasnfer.saldo - transicao.valor);
+        usuarioResived.setUserBalance(usuarioResived.getUserBalance() + transicao.getTransitionValue());
+        usuarioTrasnfer.setUserBalance(usuarioTrasnfer.getUserBalance() - transicao.getTransitionValue());
         Salvar(transicao);
-        NotificacaoService.CriarNotificacao();
+        NotificacaoService.createNotification();
         return "pagamento feito";
 
     }
 
     public List<TransactionEntity> getAll(int id)
     {
-        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.id == id).findFirst().orElse(null);
+        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
 
-        if(usuarioTrasnfer.TipoUser != TypeUserEnum.Bancario) {
+        if(usuarioTrasnfer.getTypeUser() != TypeUserEnum.Bancario) {
             return null;
         }
 
@@ -72,7 +71,7 @@ public class TransactionService implements ITransactionService {
 
     public List<TransactionEntity> getByUserId(int id) {
         List<TransactionEntity> transacao = Transacaorepositorio.BuscarTodos();
-        return transacao.stream().filter(x -> x.userId == id).toList();
+        return transacao.stream().filter(x -> x.getTransitionValue() == id).toList();
     }
 
 }

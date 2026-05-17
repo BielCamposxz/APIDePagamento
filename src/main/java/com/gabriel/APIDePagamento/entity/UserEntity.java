@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserEntity {
-    public int id;
-    public String nome;
-    public int saldo;
-    public TypeUserEnum TipoUser;
+    private int id;
+    private String name;
+    private int userBalance;
+    private TypeUserEnum TypeUser;
 
 }

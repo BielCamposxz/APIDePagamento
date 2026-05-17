@@ -8,26 +8,16 @@ import java.util.List;
 
 @Repository
 public class NotificationRepository implements INotificationRepository {
-    List<NotificationEntity> noticacoesResived = new LinkedList<>();
-    List<NotificationEntity> noticacoesTransmited = new LinkedList<>();
     List<NotificationEntity> AllNotification = new LinkedList<>();
 
-    public void Salvar(NotificationEntity notificacaoResived, NotificationEntity notificacaoTransmited){
-        noticacoesResived.add(notificacaoResived);
-        noticacoesTransmited.add(notificacaoTransmited);
+    public void saveNewNotification(NotificationEntity receiverNotification, NotificationEntity senderNotification){
+        this.AllNotification.add(receiverNotification);
+        this.AllNotification.add(senderNotification);
     }
 
-    public List<NotificationEntity> BuscarResived() {
-        return noticacoesResived;
-    }
-    public List<NotificationEntity> BuscarTransmited() {
-        return noticacoesTransmited;
+    public List<NotificationEntity> getAllNotification() {
+        return this.AllNotification;
     }
 
-    public List<NotificationEntity> BuscarTodas() {
-        AllNotification.addAll(noticacoesResived);
-        AllNotification.addAll(noticacoesTransmited);
-        return AllNotification;
-    }
 
 }
