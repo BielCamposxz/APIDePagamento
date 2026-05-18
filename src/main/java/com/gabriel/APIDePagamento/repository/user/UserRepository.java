@@ -27,7 +27,7 @@ public class UserRepository implements IUserRepository {
                 usuario.getName(),
                 usuario.getUserBalance(),
                 usuario.getTypeUser()
-        );
+        ));
     }
 
     public List<UserEntity> BuscarTodos() {

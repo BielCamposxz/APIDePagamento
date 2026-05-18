@@ -12,66 +12,43 @@ import java.util.List;
 
 @Service
 public class TransactionService implements ITransactionService {
-    @Autowired
-    public ITransactionRepository Transacaorepositorio;
+    private final ITransactionRepository transactionRepository;
 
-    @Autowired
-    public IUserRepository UserRepositorio;
+    private final IUserRepository userRepository;
 
-    @Autowired
-    public INotificationService NotificacaoService;
+    private final INotificationService notificationService;
 
-    public void Salvar(TransactionEntity transicao) {
-        Transacaorepositorio.Salvar(new TransactionEntity(
-                transicao.getId(),
-                transicao.getSenderUserId(),
-                transicao.getReceiverUserId(),
-                transicao.getTransitionValue()
-        ));
+    public TransactionService(ITransactionRepository transactionRepository, IUserRepository userRepository, INotificationService notificationService) {
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
-    public String makePayment(TransactionEntity transicao, int id){
+    public String makePayment(TransactionEntity transaction){
+        UserEntity senderUser = this.userRepository.getUserById(transaction.getSenderUserId());
+        UserEntity receiverUser = this.userRepository.getUserById(transaction.getReceiverUserId());
 
-        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == transicao.getId()).findFirst().orElse(null);
+        if(senderUser.getTypeUser() == TypeUserEnum.Logista) return "Logistas nao podem fazer transacaoes";
+        if(senderUser.getUserBalance() < transaction.getTransitionValue()) return "Saldo insuficiente";
+        if(receiverUser.getTypeUser() == TypeUserEnum.Bancario) return "Bancarios nao pode receber transacoes";
 
-        if(usuarioTrasnfer.getId() != id) {
-            return "Voce pode fazer transacoes apenas da sua conta logada";
-        }
-        if(usuarioTrasnfer.getTypeUser() == TypeUserEnum.Logista) {
-            return "Logistas nao podem fazer transacaoes";
-        }
-        if(usuarioTrasnfer.getUserBalance() < transicao.getTransitionValue()) {
-            return "Saldo insuficiente";
-        }
-
-
-        UserEntity usuarioResived = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == transicao.getReceiverUserId()).findFirst().orElse(null);
-        if(usuarioResived.getTypeUser() == TypeUserEnum.Bancario) {
-            return "Bancarios nao pode receber transacoes";
-        }
-
-        usuarioResived.setUserBalance(usuarioResived.getUserBalance() + transicao.getTransitionValue());
-        usuarioTrasnfer.setUserBalance(usuarioTrasnfer.getUserBalance() - transicao.getTransitionValue());
-        Salvar(transicao);
-        NotificacaoService.createNotification();
+        receiverUser.deposit(transaction.getTransitionValue());
+        senderUser.withdraw(transaction.getTransitionValue());
+        this.transactionRepository.saveTransaction(transaction);
+        this.notificationService.createNotification(transaction);
         return "pagamento feito";
-
     }
 
-    public List<TransactionEntity> getAll(int id)
+    public List<TransactionEntity> getAllTransaction(int id)
     {
-        UserEntity usuarioTrasnfer = UserRepositorio.BuscarTodos().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+        UserEntity senderUser = this.userRepository.getUserById(id);
+        if(senderUser.getTypeUser() != TypeUserEnum.Bancario) return List.of();
 
-        if(usuarioTrasnfer.getTypeUser() != TypeUserEnum.Bancario) {
-            return null;
-        }
-
-        return Transacaorepositorio.BuscarTodos();
+        return this.transactionRepository.getAllTransaction();
     }
 
-    public List<TransactionEntity> getByUserId(int id) {
-        List<TransactionEntity> transacao = Transacaorepositorio.BuscarTodos();
-        return transacao.stream().filter(x -> x.getTransitionValue() == id).toList();
+    public List<TransactionEntity> getTransactionByUserId(int id) {
+        return this.transactionRepository.getTransactionByUserId(id);
     }
 
 }

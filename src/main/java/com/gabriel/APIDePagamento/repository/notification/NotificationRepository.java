@@ -8,15 +8,19 @@ import java.util.List;
 
 @Repository
 public class NotificationRepository implements INotificationRepository {
-    List<NotificationEntity> AllNotification = new LinkedList<>();
+    List<NotificationEntity> allNotification = new LinkedList<>();
 
     public void saveNewNotification(NotificationEntity receiverNotification, NotificationEntity senderNotification){
-        this.AllNotification.add(receiverNotification);
-        this.AllNotification.add(senderNotification);
+        this.allNotification.add(receiverNotification);
+        this.allNotification.add(senderNotification);
     }
 
     public List<NotificationEntity> getAllNotification() {
-        return this.AllNotification;
+        return this.allNotification;
+    }
+
+    public List<NotificationEntity> getNotificationByUserId(int id) {
+        return this.allNotification.stream().filter(x -> x.getSenderUserId() == id || x.getReceiverUserId() == id).toList();
     }
 
 

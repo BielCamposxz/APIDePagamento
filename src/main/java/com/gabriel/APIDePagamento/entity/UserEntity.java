@@ -11,7 +11,15 @@ import lombok.Setter;
 public class UserEntity {
     private int id;
     private String name;
-    private int userBalance;
+    private double userBalance;
     private TypeUserEnum TypeUser;
+
+    public void deposit(double value) {
+        this.userBalance += value;
+    }
+
+    public void withdraw(double value) {
+        this.userBalance -= value;
+    }
 
 }

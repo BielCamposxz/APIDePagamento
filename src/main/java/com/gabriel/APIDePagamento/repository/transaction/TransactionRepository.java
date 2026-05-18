@@ -8,14 +8,18 @@ import java.util.List;
 
 @Repository
 public class TransactionRepository implements ITransactionRepository {
-    List<TransactionEntity> transoes = new LinkedList();
+    List<TransactionEntity> allTransaction = new LinkedList<>();
 
-    public void Salvar(TransactionEntity transacao) {
-        transoes.add(transacao);
+    public void saveTransaction(TransactionEntity transaction) {
+        this.allTransaction.add(transaction);
     }
 
     public List<TransactionEntity> getAllTransaction() {
-        return transoes;
+        return this.allTransaction;
+    }
+
+    public List<TransactionEntity> getTransactionByUserId(int id) {
+        return this.allTransaction.stream().filter(x -> x.getReceiverUserId() == id || x.getSenderUserId() == id).toList();
     }
 
 }

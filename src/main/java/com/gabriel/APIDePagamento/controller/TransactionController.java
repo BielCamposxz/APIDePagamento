@@ -18,17 +18,17 @@ public class TransactionController {
 
     @GetMapping("/user/{id}/history")
     public List<TransactionEntity> getTransactionHistoryByUserId(@PathVariable int id) {
-        return this.transactionService.getByUserId(id);
+        return this.transactionService.getTransactionByUserId(id);
     }
 
-    @PostMapping("/user/{id}/payment")
-    public String payment(@RequestBody TransactionEntity transaction, @PathVariable int id) {
-        return this.transactionService.makePayment(transaction, id);
+    @PostMapping("/payment")
+    public String payment(@RequestBody TransactionEntity transaction) {
+        return this.transactionService.makePayment(transaction);
     }
 
     @GetMapping("/user/{id}/history/all")
     public List<TransactionEntity> getAllTransactionHistory(@PathVariable int id){
-        return this.transactionService.getAll(id);
+        return this.transactionService.getAllTransaction(id);
     }
 
 }

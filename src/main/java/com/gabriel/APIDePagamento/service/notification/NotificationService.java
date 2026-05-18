@@ -17,38 +17,33 @@ import java.util.List;
 @Service
 public class NotificationService implements INotificationService {
 
-    private final ITransactionRepository transactionRepository;
     private final INotificationRepository notificationRepository;
     private final IUserRepository userRepository;
 
-    public NotificationService(ITransactionRepository transactionRepository, INotificationRepository notificationRepository, IUserRepository userRepository) {
-        this.transactionRepository = transactionRepository;
+    public NotificationService(INotificationRepository notificationRepository, IUserRepository userRepository) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
     }
 
-
-    public void createNotification() {
-        TransactionEntity getLastTransaction = this.transactionRepository.getAllTransaction().getLast();
-
-        UserEntity receiverUser = this.userRepository.getUserById(getLastTransaction.getReceiverUserId());
-        UserEntity senderUser = this.userRepository.getUserById(getLastTransaction.getSenderUserId());
+    public void createNotification(TransactionEntity transaction) {
+        UserEntity receiverUser = this.userRepository.getUserById(transaction.getReceiverUserId());
+        UserEntity senderUser = this.userRepository.getUserById(transaction.getSenderUserId());
 
         this.notificationRepository.saveNewNotification(
-                NotificationEntity.createNewReceiverNotification(getLastTransaction, receiverUser.getName()),
-                NotificationEntity.createNewSenderNotification(getLastTransaction, senderUser.getName())
+                NotificationEntity.createNewReceiverNotification(transaction, receiverUser.getName()),
+                NotificationEntity.createNewSenderNotification(transaction, senderUser.getName())
         );
 
     }
 
     public List<NotificationEntity> getAllNotification(int id) {
         UserEntity user = this.userRepository.getUserById(id);
-        if(user.getTypeUser() != TypeUserEnum.Bancario) return null;
+        if(user.getTypeUser() != TypeUserEnum.Bancario) return List.of();
 
         return this.notificationRepository.getAllNotification();
     }
 
     public List<NotificationEntity> getNotificationByUserId(int id) {
-        return this.notificationRepository.getAllNotification().stream().filter(x -> x.getSenderUserId() == id || x.getReceiverUserId() == id).toList();
+        return this.notificationRepository.getNotificationByUserId(id);
     }
 }
