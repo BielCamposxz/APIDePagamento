@@ -16,25 +16,16 @@ import java.util.List;
 public class UserRepository implements IUserRepository {
     List<UserEntity> users = new LinkedList<>();
 
-    public void Salvar(UserEntity usuario)
+    public void saveUser(UserEntity user)
     {
-        users.add(usuario);
+        this.users.add(user);
     }
 
-    public void FistUser(UserEntity usuario) {
-        users.add(new UserEntity(
-                usuario.getId(),
-                usuario.getName(),
-                usuario.getUserBalance(),
-                usuario.getTypeUser()
-        ));
+    public List<UserEntity> getAllUsers() {
+        return this.users;
     }
 
-    public List<UserEntity> BuscarTodos() {
-        return users;
-    }
-
-    public UserEntity getUserById(int id) {
-        return this.users.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+    public UserEntity getUserById(int userId) {
+        return this.users.stream().filter(x -> x.getId() == userId).findFirst().orElse(null);
     }
 }

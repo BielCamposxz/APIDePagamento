@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface IUserRepository {
 
-    public void Salvar(UserEntity usuario);
+    public void saveUser(UserEntity usuario);
 
-    public List<UserEntity> BuscarTodos();
-    public void FistUser(UserEntity usuario);
-    public UserEntity getUserById(int id);
+    public List<UserEntity> getAllUsers();
+    public UserEntity getUserById(int userId);
 }

@@ -22,4 +22,13 @@ public class UserEntity {
         this.userBalance -= value;
     }
 
+    public static UserEntity CreateNewUser(UserEntity user) {
+        return new UserEntity(
+                user.getId(),
+                user.getName(),
+                user.getUserBalance(),
+                user.getTypeUser()
+        );
+    }
+
 }

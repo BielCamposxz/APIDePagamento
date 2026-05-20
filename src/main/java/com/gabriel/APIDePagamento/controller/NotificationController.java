@@ -19,14 +19,15 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @GetMapping("/user/{id}")
-    public List<NotificationEntity> getNotificationsByUserId(@PathVariable int id) {
-        return this.notificationService.getNotificationByUserId(id);
+    // esta puxando todas as notificacoes
+    @GetMapping("/user/{userId}")
+    public List<NotificationEntity> getNotificationsByUserId(@PathVariable int userId) {
+        return this.notificationService.getNotificationByUserId(userId);
     }
 
-    @GetMapping("/user/{id}/all")
-    public List<NotificationEntity> getAllNotifications(@PathVariable int id) {
-        return this.notificationService.getAllNotification(id);
+    @GetMapping("/user/{userId}/all")
+    public List<NotificationEntity> getAllNotifications(@PathVariable int userId) {
+        return this.notificationService.getAllNotification(userId);
     }
 
 

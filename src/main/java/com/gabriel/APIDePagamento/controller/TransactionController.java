@@ -16,9 +16,9 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/user/{id}/history")
-    public List<TransactionEntity> getTransactionHistoryByUserId(@PathVariable int id) {
-        return this.transactionService.getTransactionByUserId(id);
+    @GetMapping("/user/{userId}/history")
+    public List<TransactionEntity> getTransactionHistoryByUserId(@PathVariable int userId) {
+        return this.transactionService.getTransactionByUserId(userId);
     }
 
     @PostMapping("/payment")
@@ -26,9 +26,9 @@ public class TransactionController {
         return this.transactionService.makePayment(transaction);
     }
 
-    @GetMapping("/user/{id}/history/all")
-    public List<TransactionEntity> getAllTransactionHistory(@PathVariable int id){
-        return this.transactionService.getAllTransaction(id);
+    @GetMapping("/user/{userId}/history/all")
+    public List<TransactionEntity> getAllTransactionHistory(@PathVariable int userId){
+        return this.transactionService.getAllTransaction(userId);
     }
 
 }

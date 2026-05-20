@@ -14,43 +14,30 @@ public class UserService implements IUserService{
     @Autowired
     private IUserRepository userRepositorio;
 
-    public UserEntity BuscarUser(int id) {
-        return userRepositorio.BuscarTodos().stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+    public UserEntity getUser(int userId) {
+        return this.userRepositorio.getUserById(userId);
     }
 
-    public UserEntity getUser(int id) {
-        return BuscarUser(id);
-    }
-
-    public String saveUser(UserEntity usuario, int id) {
-        UserEntity usuarioRetornado = BuscarUser(id);
-
-        if(usuarioRetornado.getTypeUser() != TypeUserEnum.Bancario) {
-            return "Apenas bancarios pode fazer criar usuarios";
+    public String saveNewUser(UserEntity user, int userId) {
+        if(this.userRepositorio.getAllUsers().isEmpty()) {
+            userRepositorio.saveUser(UserEntity.CreateNewUser(user));
+            return "Usuario criado com sucesso";
         }
 
-        UserEntity usuarioInstacia = new UserEntity(
-                usuario.getId(),
-                usuario.getName(),
-                usuario.getUserBalance(),
-                usuario.getTypeUser()
-        );
-        userRepositorio.Salvar(usuarioInstacia);
+        UserEntity userById = this.userRepositorio.getUserById(userId);
+        if(userById.getTypeUser() != TypeUserEnum.Bancario) return "Apenas bancarios pode fazer criar usuarios";
+
+
+        userRepositorio.saveUser(UserEntity.CreateNewUser(user));
         return "Usuario criado com sucesso";
     }
 
-    public List<UserEntity> getAllUsers(int id) {
-        UserEntity usuario = BuscarUser(id);
+    public List<UserEntity> getAllUsers(int userId) {
+        UserEntity user = this.userRepositorio.getUserById(userId);
+        if(user.getTypeUser() != TypeUserEnum.Bancario) return List.of();
 
-        if(usuario.getTypeUser() != TypeUserEnum.Bancario) {
-            return null;
-        }
-
-        return userRepositorio.BuscarTodos();
+        return userRepositorio.getAllUsers();
     }
 
-    public void CriarPrimeiroUser(UserEntity usuario) {
-        userRepositorio.FistUser(usuario);
-    }
 
 }

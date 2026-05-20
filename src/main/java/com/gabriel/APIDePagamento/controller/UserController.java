@@ -16,25 +16,20 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}/all")
-    public List<UserEntity> getAllUsers(@PathVariable int id) {
-        return this.userService.getAllUsers(id);
+    @GetMapping("/{userId}/all")
+    public List<UserEntity> getAllUsers(@PathVariable int userId) {
+        return this.userService.getAllUsers(userId);
     }
 
-    @GetMapping("/{id}")
-    public UserEntity getUserById(@PathVariable int id) {
-        return this.userService.getUser(id);
+    // trocar para o nome ex" pegar informacoes do usuario logado
+    @GetMapping("/{userId}")
+    public UserEntity getUserById(@PathVariable int userId) {
+        return this.userService.getUser(userId);
     }
 
-    @PostMapping("/{id}")
-    public String saveNewUser(@RequestBody UserEntity user, @PathVariable int id) {
-        return this.userService.saveUser(user, id);
-    }
-
-    // tem que sumir
-    @PostMapping("/CreatefistUser")
-    public void Primeiro(@RequestBody UserEntity usuario) {
-        this.userService.CriarPrimeiroUser(usuario);
+    @PostMapping("/{userId}")
+    public String saveNewUser(@RequestBody UserEntity user, @PathVariable int userId) {
+        return this.userService.saveNewUser(user, userId);
     }
 
 }

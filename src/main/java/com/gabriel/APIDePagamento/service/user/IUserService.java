@@ -5,11 +5,10 @@ import com.gabriel.APIDePagamento.entity.UserEntity;
 import java.util.List;
 
 public interface IUserService {
-    public UserEntity getUser(int id);
+    public UserEntity getUser(int userId);
 
-    public String saveUser(UserEntity usuario, int id);
+    public String saveNewUser(UserEntity user, int userId);
 
-    public List<UserEntity> getAllUsers(int id);
+    public List<UserEntity> getAllUsers(int userId);
 
-    public void CriarPrimeiroUser(UserEntity usuario);
 }
