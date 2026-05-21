@@ -21,9 +21,8 @@ public class UserController {
         return this.userService.getAllUsers(userId);
     }
 
-    // trocar para o nome ex" pegar informacoes do usuario logado
     @GetMapping("/{userId}")
-    public UserEntity getUserById(@PathVariable int userId) {
+    public UserEntity getUserInformationById(@PathVariable int userId) {
         return this.userService.getUser(userId);
     }
 

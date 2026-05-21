@@ -20,7 +20,7 @@ public class NotificationRepository implements INotificationRepository {
     }
 
     public List<NotificationEntity> getNotificationByUserId(int id) {
-        return this.allNotification.stream().filter(x -> x.getSenderUserId() == id || x.getReceiverUserId() == id).toList();
+        return this.allNotification.stream().filter(x -> x.getReceiverUserId() == id).toList();
     }
 
 

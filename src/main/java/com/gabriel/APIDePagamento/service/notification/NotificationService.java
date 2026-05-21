@@ -1,17 +1,13 @@
 package com.gabriel.APIDePagamento.service.notification;
 
-import com.gabriel.APIDePagamento.objectvalue.NotificationTypeEnum;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.NotificationEntity;
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
 import com.gabriel.APIDePagamento.entity.UserEntity;
 import com.gabriel.APIDePagamento.repository.notification.INotificationRepository;
-import com.gabriel.APIDePagamento.repository.transaction.ITransactionRepository;
 import com.gabriel.APIDePagamento.repository.user.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service

@@ -19,7 +19,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    // esta puxando todas as notificacoes
     @GetMapping("/user/{userId}")
     public List<NotificationEntity> getNotificationsByUserId(@PathVariable int userId) {
         return this.notificationService.getNotificationByUserId(userId);
