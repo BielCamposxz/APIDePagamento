@@ -1,5 +1,7 @@
 package com.gabriel.APIDePagamento.service.notification;
 
+import com.gabriel.APIDePagamento.infra.exception.ForbiddenException;
+import com.gabriel.APIDePagamento.infra.exception.NotFoundException;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.NotificationEntity;
 import com.gabriel.APIDePagamento.entity.TransactionEntity;
@@ -24,6 +26,7 @@ public class NotificationService implements INotificationService {
     public void createNotification(TransactionEntity transaction) {
         UserEntity receiverUser = this.userRepository.getUserById(transaction.getReceiverUserId());
         UserEntity senderUser = this.userRepository.getUserById(transaction.getSenderUserId());
+        if(senderUser == null || receiverUser == null) throw new NotFoundException("Nenhum usuario encontrado");
 
         this.notificationRepository.saveNewNotification(
                 NotificationEntity.createNewReceiverNotification(transaction, receiverUser.getName()),
@@ -34,7 +37,8 @@ public class NotificationService implements INotificationService {
 
     public List<NotificationEntity> getAllNotification(int id) {
         UserEntity user = this.userRepository.getUserById(id);
-        if(user.getTypeUser() != TypeUserEnum.Bancario) return List.of();
+        if(user == null) throw new NotFoundException("Nenhum usuario encontrado");
+        if(user.getTypeUser() != TypeUserEnum.Bancario) throw new ForbiddenException("Apenas bancarios podem ver todas as notificacoes");
 
         return this.notificationRepository.getAllNotification();
     }

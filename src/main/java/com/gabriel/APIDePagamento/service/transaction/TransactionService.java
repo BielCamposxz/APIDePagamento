@@ -1,5 +1,7 @@
 package com.gabriel.APIDePagamento.service.transaction;
 
+import com.gabriel.APIDePagamento.infra.exception.ForbiddenException;
+import com.gabriel.APIDePagamento.infra.exception.NotFoundException;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.*;
 import com.gabriel.APIDePagamento.repository.transaction.ITransactionRepository;
@@ -27,10 +29,11 @@ public class TransactionService implements ITransactionService {
     public String makePayment(TransactionEntity transaction){
         UserEntity senderUser = this.userRepository.getUserById(transaction.getSenderUserId());
         UserEntity receiverUser = this.userRepository.getUserById(transaction.getReceiverUserId());
+        if(senderUser == null || receiverUser == null) throw new NotFoundException("Nenhum usuario encontrado");
 
         if(senderUser.getTypeUser() == TypeUserEnum.Logista) return "Logistas nao podem fazer transacaoes";
         if(senderUser.getUserBalance() < transaction.getTransitionValue()) return "Saldo insuficiente";
-        if(receiverUser.getTypeUser() == TypeUserEnum.Bancario) return "Bancarios nao pode receber transacoes";
+        if(receiverUser.getTypeUser() == TypeUserEnum.Bancario) throw new ForbiddenException("bancarios nao podem receber transacoes");
 
         receiverUser.deposit(transaction.getTransitionValue());
         senderUser.withdraw(transaction.getTransitionValue());
@@ -42,7 +45,8 @@ public class TransactionService implements ITransactionService {
     public List<TransactionEntity> getAllTransaction(int id)
     {
         UserEntity senderUser = this.userRepository.getUserById(id);
-        if(senderUser.getTypeUser() != TypeUserEnum.Bancario) return List.of();
+        if(senderUser == null) throw new NotFoundException("Nenhum usuario encontrado");
+        if(senderUser.getTypeUser() != TypeUserEnum.Bancario) throw new ForbiddenException("Apenas bancarios podem ver todas as transicoes");
 
         return this.transactionRepository.getAllTransaction();
     }

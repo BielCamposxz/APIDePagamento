@@ -1,5 +1,7 @@
 package com.gabriel.APIDePagamento.service.user;
 
+import com.gabriel.APIDePagamento.infra.exception.ForbiddenException;
+import com.gabriel.APIDePagamento.infra.exception.NotFoundException;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.UserEntity;
 import com.gabriel.APIDePagamento.repository.user.IUserRepository;
@@ -25,7 +27,8 @@ public class UserService implements IUserService{
         }
 
         UserEntity userById = this.userRepositorio.getUserById(userId);
-        if(userById.getTypeUser() != TypeUserEnum.Bancario) return "Apenas bancarios pode fazer criar usuarios";
+        if(userById == null) throw new NotFoundException("Nenhum usuario encontrado");
+        if(userById.getTypeUser() != TypeUserEnum.Bancario) throw new ForbiddenException("Apenas bancarios podem criar usuarios");
 
 
         userRepositorio.saveUser(UserEntity.CreateNewUser(user));
@@ -34,7 +37,8 @@ public class UserService implements IUserService{
 
     public List<UserEntity> getAllUsers(int userId) {
         UserEntity user = this.userRepositorio.getUserById(userId);
-        if(user.getTypeUser() != TypeUserEnum.Bancario) return List.of();
+        if(user == null) throw new NotFoundException("Nenhum usuario encontrado");
+        if(user.getTypeUser() != TypeUserEnum.Bancario) throw new ForbiddenException("Apenas bancarios podem ver todos os usuarios");
 
         return userRepositorio.getAllUsers();
     }
