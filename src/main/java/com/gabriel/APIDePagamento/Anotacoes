@@ -1,0 +1,4 @@
+quando voce adiciona as depencias do spring security ele ja bloqueia todos os endpoints da api e apenas quando voce esta autorizado voce pode usar os endpoints
+login para o spring security pelo navegador
+login: user
+Using generated security password: 10d6dc6d-4ca3-46f1-b5a5-2166758d83c5

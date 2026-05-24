@@ -28,4 +28,11 @@ public class UserRepository implements IUserRepository {
     public UserEntity getUserById(int userId) {
         return this.users.stream().filter(x -> x.getId() == userId).findFirst().orElse(null);
     }
+
+    public UserEntity findUserByLogin(String login) {
+        return this.users.stream()
+                .filter(x -> x.getLogin().equals(login))
+                .findFirst()
+                .orElse(null);
+    }
 }

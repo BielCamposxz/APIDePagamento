@@ -2,10 +2,12 @@ package com.gabriel.APIDePagamento.service.user;
 
 import com.gabriel.APIDePagamento.infra.exception.ForbiddenException;
 import com.gabriel.APIDePagamento.infra.exception.NotFoundException;
+import com.gabriel.APIDePagamento.infra.security.SecurityConfiguration;
 import com.gabriel.APIDePagamento.objectvalue.TypeUserEnum;
 import com.gabriel.APIDePagamento.entity.UserEntity;
 import com.gabriel.APIDePagamento.repository.user.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +18,16 @@ public class UserService implements IUserService{
     @Autowired
     private IUserRepository userRepositorio;
 
+    @Autowired
+    private SecurityConfiguration securityConfiguration;
+
     public UserEntity getUser(int userId) {
         return this.userRepositorio.getUserById(userId);
     }
 
     public String saveNewUser(UserEntity user, int userId) {
+        user.setPassword(this.securityConfiguration.passwordEncoder().encode(user.getPassword()));
+
         if(this.userRepositorio.getAllUsers().isEmpty()) {
             userRepositorio.saveUser(UserEntity.CreateNewUser(user));
             return "Usuario criado com sucesso";
